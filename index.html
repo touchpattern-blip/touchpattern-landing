@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>touchpattern</title>
+<meta name="description" content="Your life is forming a map of lands you have not yet discovered.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #08080c;
+    color: #e8e4df;
+    font-family: 'Space Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .mark {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+    color: #e8e4df;
+    opacity: 0;
+    animation: breatheIn 3s ease-out 0.5s forwards;
+    user-select: none;
+  }
+
+  .line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(180, 160, 130, 0.4), transparent);
+    margin: 2.5rem 0;
+    opacity: 0;
+    animation: breatheIn 2s ease-out 1.5s forwards;
+  }
+
+  .verse {
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    font-weight: 400;
+    line-height: 2;
+    color: rgba(180, 160, 130, 0.6);
+    max-width: 52ch;
+    min-height: 3.5em;
+    opacity: 0;
+    animation: breatheIn 0.5s ease-out 2s forwards;
+  }
+
+  .verse .line-1,
+  .verse .line-2 {
+    display: block;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.1em;
+    background: rgba(180, 160, 130, 0.7);
+    vertical-align: text-bottom;
+    margin-left: 2px;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .contact {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0;
+  }
+
+  .contact a {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(180, 160, 130, 0.3);
+    text-decoration: none;
+    transition: color 0.6s ease;
+  }
+
+  .contact a:hover {
+    color: rgba(232, 228, 223, 0.7);
+  }
+
+  @keyframes breatheIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="field"></canvas>
+
+<div class="content">
+  <h1 class="mark">touchpattern</h1>
+  <div class="line"></div>
+  <div class="verse">
+    <span class="line-1"></span>
+    <span class="line-2"></span>
+  </div>
+</div>
+
+<div class="contact">
+  <a href="mailto:touchpattern@gmail.com">touchpattern@gmail.com</a>
+</div>
+
+<script>
+// --- typewriter ---
+const verses = [
+  [
+    'your life is forming a map of lands you have not yet discovered.',
+    'what if you could navigate it?'
+  ],
+  [
+    'your memories form a network. it has a shape.',
+    'what if you could see it?'
+  ],
+  [
+    'the threads were always there.',
+    'now you can touch them.'
+  ],
+  [
+    'what connects everything you have ever done?',
+    'there is a pattern.'
+  ],
+  [
+    'somewhere in your history is a thread you have not pulled yet.',
+    ''
+  ],
+  [
+    'the platforms have your data. they use it to sell to you.',
+    'what if you had it — and used it to remember who you are?'
+  ],
+  [
+    'your life has a shape you have never seen.',
+    'what would you discover?'
+  ]
+];
+
+const chosen = verses[Math.floor(Math.random() * verses.length)];
+const lineEls = [document.querySelector('.line-1'), document.querySelector('.line-2')];
+const lines = chosen.map((text, i) => ({ el: lineEls[i], text })).filter(l => l.text);
+
+function typewrite(el, text, baseSpeed) {
+  return new Promise(resolve => {
+    let i = 0;
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    el.appendChild(cursor);
+
+    function typeNext() {
+      el.insertBefore(document.createTextNode(text[i]), cursor);
+      i++;
+      if (i >= text.length) {
+        resolve(cursor);
+        return;
+      }
+      const jitter = baseSpeed + (Math.random() - 0.3) * baseSpeed * 0.8;
+      const pause = text[i - 1] === ' ' ? jitter + baseSpeed * 0.4 : jitter;
+      setTimeout(typeNext, pause);
+    }
+    setTimeout(typeNext, baseSpeed);
+  });
+}
+
+async function runTypewriter() {
+  await new Promise(r => setTimeout(r, 2500));
+
+  let lastCursor;
+  for (let i = 0; i < lines.length; i++) {
+    if (lastCursor) { lastCursor.remove(); }
+    lastCursor = await typewrite(lines[i].el, lines[i].text, 110);
+    if (i < lines.length - 1) {
+      await new Promise(r => setTimeout(r, 900));
+    }
+  }
+  // leave final cursor blinking
+
+  await new Promise(r => setTimeout(r, 800));
+  const contact = document.querySelector('.contact');
+  contact.style.animation = 'fadeIn 2s ease-out forwards';
+}
+
+runTypewriter();
+
+// --- pulse wave field ---
+const canvas = document.getElementById('field');
+const ctx = canvas.getContext('2d');
+let w, h, nodes, pulses;
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+
+function init() {
+  resize();
+  const count = Math.floor((w * h) / 8000);
+  nodes = Array.from({ length: count }, () => ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 1.8 + 0.6,
+    baseAlpha: Math.random() * 0.08 + 0.04,
+    lit: 0
+  }));
+  pulses = [];
+  schedulePulse();
+}
+
+function schedulePulse() {
+  const delay = 1800 + Math.random() * 3000;
+  setTimeout(() => {
+    pulses.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      radius: 0,
+      maxRadius: Math.min(w, h) * (0.3 + Math.random() * 0.35),
+      speed: 1.2 + Math.random() * 0.8,
+      life: 1
+    });
+    schedulePulse();
+  }, delay);
+}
+
+const connectionDist = 130;
+
+function draw() {
+  ctx.clearRect(0, 0, w, h);
+
+  for (const n of nodes) {
+    n.lit *= 0.975;
+  }
+
+  for (let p = pulses.length - 1; p >= 0; p--) {
+    const pulse = pulses[p];
+    pulse.radius += pulse.speed;
+    pulse.life = 1 - (pulse.radius / pulse.maxRadius);
+
+    if (pulse.life <= 0) {
+      pulses.splice(p, 1);
+      continue;
+    }
+
+    const ringWidth = 80;
+
+    for (const n of nodes) {
+      const dx = n.x - pulse.x;
+      const dy = n.y - pulse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const distFromRing = Math.abs(dist - pulse.radius);
+
+      if (distFromRing < ringWidth) {
+        const intensity = (1 - distFromRing / ringWidth) * pulse.life;
+        n.lit = Math.max(n.lit, intensity);
+      }
+    }
+
+    ctx.beginPath();
+    ctx.arc(pulse.x, pulse.y, pulse.radius, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(200, 180, 140, ${pulse.life * 0.08})`;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  for (let i = 0; i < nodes.length; i++) {
+    const n = nodes[i];
+    const alpha = n.baseAlpha + n.lit * 0.9;
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r + n.lit * 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200, 180, 140, ${alpha})`;
+    ctx.fill();
+
+    if (n.lit > 0.1) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r + n.lit * 12, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 180, 140, ${n.lit * 0.15})`;
+      ctx.fill();
+    }
+
+    if (n.lit > 0.15) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const m = nodes[j];
+        if (m.lit < 0.15) continue;
+        const dx = n.x - m.x;
+        const dy = n.y - m.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < connectionDist) {
+          const lineAlpha = (1 - d / connectionDist) * Math.min(n.lit, m.lit) * 1.2;
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(m.x, m.y);
+          ctx.strokeStyle = `rgba(180, 160, 130, ${lineAlpha})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => {
+  resize();
+  init();
+});
+
+init();
+requestAnimationFrame(draw);
+</script>
+
+</body>
+</html>
