@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>touchpattern / links</title>
+<meta name="description" content="Gio Ray. Environment architect. Local-first AI and technical direction. Build systems that can't be switched off from above.">
+<meta property="og:title" content="touchpattern / Gio Ray">
+<meta property="og:description" content="Local-first AI architecture and technical direction. Build on what you own.">
+<meta name="robots" content="index,follow">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #08080c;
+    --text: #e8e4df;
+    --dim: #8a857d;
+    --accent: rgba(190, 168, 132, 0.9);
+    --accent-dim: rgba(190, 168, 132, 0.35);
+    --card: rgba(255, 255, 255, 0.025);
+    --card-line: rgba(255, 255, 255, 0.08);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* soft radial glow, evokes the landing pulse without heavy JS */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(900px 500px at 50% -10%, rgba(190,168,132,0.10), transparent 70%),
+      radial-gradient(700px 600px at 50% 120%, rgba(120,130,170,0.06), transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    padding: 3.2rem 1.4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mark {
+    font-size: 1.7rem;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+    font-weight: 400;
+  }
+  .name {
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .line {
+    width: 44px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+    margin: 1.6rem 0 1.4rem;
+  }
+
+  .tagline {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--dim);
+    text-align: center;
+    max-width: 340px;
+    margin-bottom: 2.2rem;
+  }
+  .tagline strong { color: var(--text); font-weight: 400; }
+
+  .links { width: 100%; display: flex; flex-direction: column; gap: 0.85rem; }
+
+  a.link {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: 14px;
+    padding: 1.05rem 1.2rem;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+  }
+  a.link:hover, a.link:active { border-color: var(--accent-dim); background: rgba(190,168,132,0.06); transform: translateY(-1px); }
+  a.link.primary { border-color: var(--accent-dim); background: rgba(190,168,132,0.05); }
+
+  .link .t { font-size: 0.95rem; letter-spacing: 0.02em; display: flex; align-items: center; justify-content: space-between; }
+  .link .t .arrow { color: var(--accent); opacity: 0.7; font-size: 0.85rem; }
+  .link .d { font-size: 0.72rem; color: var(--dim); line-height: 1.5; margin-top: 0.35rem; }
+  .tag {
+    display: inline-block; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--bg); background: var(--accent); border-radius: 4px; padding: 2px 6px; margin-bottom: 0.5rem;
+  }
+
+  .foot {
+    margin-top: 2.6rem; font-size: 0.62rem; letter-spacing: 0.12em;
+    color: rgba(138,133,125,0.55); text-align: center; line-height: 1.7;
+  }
+  .foot a { color: rgba(190,168,132,0.6); text-decoration: none; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="mark">touchpattern</div>
+    <div class="name">Gio Ray</div>
+    <div class="line"></div>
+    <p class="tagline">Environment architect. I build <strong>local-first AI systems</strong> and technical direction. Tools that can't be switched off from above.</p>
+
+    <nav class="links">
+      <a class="link primary" href="https://futureproofav.com/sovereign-ai.html" target="_blank" rel="noopener">
+        <span class="tag">Work with me</span>
+        <span class="t">Sovereign AI Audit <span class="arrow">&#8599;</span></span>
+        <span class="d">A flat-rate async audit of where your stack is dangerously dependent on tools someone else controls, and how to make the load-bearing parts yours.</span>
+      </a>
+
+      <a class="link" href="https://futureproofav.com" target="_blank" rel="noopener">
+        <span class="t">Futureproof AV <span class="arrow">&#8599;</span></span>
+        <span class="d">Technical direction, systems integration, and consulting for resilient, sovereign setups.</span>
+      </a>
+
+      <a class="link" href="https://touchpattern.io" target="_blank" rel="noopener">
+        <span class="t">touchpattern, the project <span class="arrow">&#8599;</span></span>
+        <span class="d">Your life is forming a map of lands you have not yet discovered.</span>
+      </a>
+
+      <a class="link" href="mailto:futureproofav@gmail.com?subject=Hello%20from%20Instagram">
+        <span class="t">Get in touch <span class="arrow">&#8594;</span></span>
+        <span class="d">A real message reaches a real person. Tell me what you're building.</span>
+      </a>
+    </nav>
+
+    <div class="foot">
+      Served from my own machine, not a platform.<br>
+      <a href="https://touchpattern.io">touchpattern.io</a>
+    </div>
+  </main>
+</body>
+</html>
