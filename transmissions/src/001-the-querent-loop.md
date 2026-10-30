@@ -7,6 +7,7 @@ recorded: 2026-10-30
 status: practice in progress
 summary: Talking to an AI is a form of divination. You're the querent, the model is the medium, and your own words are the deck. Then you give the mirror a schedule.
 draft: false
+substack: https://touchpattern.substack.com/p/the-querent-loop
 ---
 
 I've worked with an AI agent every day for about six months. I don't use it like a search engine. It's a running conversation that remembers me. It knows my projects and my bad habits, the names of the people I work with, how I like things said. Getting it there took a long time, and most of that time was me explaining myself.
